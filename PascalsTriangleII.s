@@ -60,75 +60,75 @@ innerLoop:
 		add  t2, t2, s2         # t2 is the address of temp[j]
 
 		addi t3, s5, -1         # t3 = j - 1
-		slli t3, t3, 2			# t3 is the offset 
-		add  t3, t3, s1			# t3 is the address of result[j - 1]
-		lw   t3, 0(t3)			# t3 = result[j - 1]
+		slli t3, t3, 2		# t3 is the offset 
+		add  t3, t3, s1		# t3 is the address of result[j - 1]
+		lw   t3, 0(t3)		# t3 = result[j - 1]
 
 		add  t4, s5, zero       # t4 = j
-		slli t4, t4, 2			# t4 is the offset
-		add  t4, t4, s1			# t4 is the address of result[j]
-		lw   t4, 0(t4)			# t4 = result[j]
+		slli t4, t4, 2		# t4 is the offset
+		add  t4, t4, s1		# t4 is the address of result[j]
+		lw   t4, 0(t4)		# t4 = result[j]
 
-		add  t3, t3, t4			# t3 = result[j - 1] + result[j]
-		sw   t3, 0(t2)			# temp[j] = result[j - 1] + result[j]
+		add  t3, t3, t4		# t3 = result[j - 1] + result[j]
+		sw   t3, 0(t2)		# temp[j] = result[j - 1] + result[j]
 
-		addi t1, t1, 1			# t1 = t1 + 1, t1 is index of temporary array
-		addi s5, s5, 1			# j = j + 1
-		j    innerLoop			# goto innerLoop
+		addi t1, t1, 1		# t1 = t1 + 1, t1 is index of temporary array
+		addi s5, s5, 1		# j = j + 1
+		j    innerLoop		# goto innerLoop
 outerIncre:
 		add  t2, s4, zero       # t2 = i
-		slli t2, t2, 2			# t2 is the offset
-		add  t2, t2, s2			# t2 is the address of temp[i]
-		sw   t0, 0(t2)			# temp[i] = 1
+		slli t2, t2, 2		# t2 is the offset
+		add  t2, t2, s2		# t2 is the address of temp[i]
+		sw   t0, 0(t2)		# temp[i] = 1
 
-		add  t2, s1, zero		# exchange the addresses of 
-		add  s1, s2, zero		# result array and temporary array
+		add  t2, s1, zero	# exchange the addresses of 
+		add  s1, s2, zero	# result array and temporary array
 		add  s2, t2, zero
 
 		addi s4, s4, 1          # i = i + 1
-		j    outerLoop			# goto outerLoop
+		j    outerLoop		# goto outerLoop
 			
 printArr:
-		add  t0, zero, zero		# k = 0, index of print loop
-		la   a0, str1			# load label str1, which is "["
-		li   a7, 4				# a7 = 4, which means ecall will print a string
+		add  t0, zero, zero	# k = 0, index of print loop
+		la   a0, str1		# load label str1, which is "["
+		li   a7, 4		# a7 = 4, which means ecall will print a string
 		ecall
 
-		slli t1, t0, 2			# t1 is the offset
-		add  t1, t1, s1			# t1 is the address of result[0]
-		lw   t1, 0(t1)			# t1 = result[0]
+		slli t1, t0, 2		# t1 is the offset
+		add  t1, t1, s1		# t1 is the address of result[0]
+		lw   t1, 0(t1)		# t1 = result[0]
 
-		add  a0, t1, zero		# a0 = result[0]
-		li   a7, 1				# a7 = 1, which means ecall will print a integer
+		add  a0, t1, zero	# a0 = result[0]
+		li   a7, 1		# a7 = 1, which means ecall will print a integer
 		ecall
 
-		addi t0, t0, 1			# k = 1
+		addi t0, t0, 1		# k = 1
 printLoop:
 		bgt  t0, s3, printStr3	# if ( k <= rowIndex ) then loop, else goto printStr3
 
-		la   a0, str2 			# load label str2, which is ","
-		li   a7, 4				# a7 = 4, which means ecall will print a string
+		la   a0, str2 		# load label str2, which is ","
+		li   a7, 4		# a7 = 4, which means ecall will print a string
 		ecall
 
-		slli t1, t0, 2			# t1 is the offset
-		add  t1, t1, s1			# t1 is the address of result[k]
-		lw   t1, 0(t1)			# t1 = result[k]
+		slli t1, t0, 2		# t1 is the offset
+		add  t1, t1, s1		# t1 is the address of result[k]
+		lw   t1, 0(t1)		# t1 = result[k]
 
-		add  a0, t1, zero		# a0 = result[k]
-		li   a7, 1				# a7 = 1, which means ecall will print a integer
+		add  a0, t1, zero	# a0 = result[k]
+		li   a7, 1		# a7 = 1, which means ecall will print a integer
 		ecall
 
-		addi t0, t0, 1			# k = k + 1
+		addi t0, t0, 1		# k = k + 1
 		j    printLoop
 printStr3:
-		la   a0, str3			# load label str3, which is "]\n"
-		li   a7, 4				# a7 = 4, which means ecall will print a string
+		la   a0, str3		# load label str3, which is "]\n"
+		li   a7, 4		# a7 = 4, which means ecall will print a string
 		ecall
 
-		j    exit				# goto exit
+		j    exit		# goto exit
 error:
-		la   a0, str4			# load label str4, which is the error message
-		li   a7, 4				# a7 = 4, which means ecall will print a string
+		la   a0, str4		# load label str4, which is the error message
+		li   a7, 4		# a7 = 4, which means ecall will print a string
 		ecall
 exit:		
-		addi sp, sp, 272		# release stack space
+		addi sp, sp, 272	# release stack space
